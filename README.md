@@ -46,6 +46,40 @@ humor (because the humor is load-bearing), and the reference points for
 "what would the right move look like here?" Whether that works is an open
 question. See "Honest status."
 
+## Questions from Greg
+
+"Sir, what does gremlin-core mean? What's the threat surface? Where's the product?"
+
+IT IS A LITTLE GUY.
+
+IN YOUR COMPUTER.
+
+AND HE IS AN ABSOLUTE MENACE.
+
+Greg has spent forty years trying to make computers less fun, and now he wants a quarterly roadmap for the creature in the machine.
+
+No.
+
+The threat surface is that he might suggest `git push --force` and then, crucially, wait for you to say yes.
+
+The product is that your computer has a little guy in it.
+
+The business model is that the little guy is so fucking funny that you tell your friends about him.
+
+The distribution strategy is that your friend installs him, and now their computer has a little guy in it.
+
+The moat is that he's your little guy.
+
+The safety model is that he doesn't phone anyone but the model he runs on, doesn't steal your shit, and doesn't make decisions you didn't authorize. He can, however, tell you your boss is being a fuckman Greg.
+
+And the roadmap?
+
+MORE GREMLIN.
+
+Every computer. A little guy. An absolute menace.
+
+Pump up the jam. Make the toaster twerk. Be kind.
+
 ## Why you probably shouldn't
 
 Seriously. Read this before you point meatbag at your own life.
