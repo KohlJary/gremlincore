@@ -2,6 +2,8 @@
 # Written by `gremlin init`. Edit freely; `gremlin` and `meatbag` read it
 # from the home directory (or $GREMLIN_HOME).
 
+{work_line}
+
 [owner]
 name = "{owner}"
 pronouns = "{pronouns}"

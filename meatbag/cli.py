@@ -1,6 +1,7 @@
 """meatbag: your AI-chat exports in, a persona corpus out.
 
-Run from the agent's home (or set GREMLIN_HOME). In pipeline order:
+Run from the agent's home (or set GREMLIN_HOME). Every command refuses to
+run in a work home (work = true in gremlin.toml), and exits 4. In pipeline order:
 
   meatbag normalize EXPORT.zip ...   Claude / ChatGPT exports -> data/turns.jsonl
   meatbag mine tag                    one domain label per conversation (local model)
@@ -33,7 +34,8 @@ def main(argv=None):
         print(__doc__)
         return 0 if argv else 2
     cmd, rest = argv[0], argv[1:]
-    from . import stubs
+    from . import refuse_work_home, stubs
+    refuse_work_home()
     if cmd == "distill":
         return stubs.distill(rest)
     if cmd == "select-cases":

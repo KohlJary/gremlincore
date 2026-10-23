@@ -33,6 +33,10 @@ def today():
 
 # Everything a stranger's agent needs to not be somebody else's.
 DEFAULTS = {
+    # A work home (`gremlin init --work`) runs at work: nothing in it becomes
+    # a plate. meatbag refuses to run in one and `gremlin plate export`
+    # refuses to export from one.
+    "work": False,
     "owner": {"name": "you", "pronouns": "they/them"},
     "agent": {"name": "gremlin", "symbol": "⊖"},
     "paths": {
@@ -109,6 +113,15 @@ def config(home=None):
     cfg["paths"]["pipeline"] = str(Path(cfg["paths"]["pipeline"] or base / "pipeline").expanduser())
     cfg["paths"]["eval"] = str(Path(cfg["paths"]["eval"] or base / "eval").expanduser())
     return cfg
+
+
+def is_work(cfg=None, home=None):
+    """True when the home is a work home. Anything that reads like yes counts:
+    a guard that a typo can switch off isn't one."""
+    v = (cfg or config(home)).get("work", False)
+    if isinstance(v, str):
+        return v.strip().lower() in ("true", "yes", "1", "on")
+    return bool(v)
 
 
 def slug(name):

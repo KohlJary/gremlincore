@@ -79,4 +79,6 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    from meatbag import refuse_work_home
+    refuse_work_home()
     main()

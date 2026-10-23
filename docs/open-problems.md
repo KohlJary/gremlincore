@@ -57,17 +57,20 @@ they check it. The design rule is that work data can't get into the
 plate **by construction**. "The agent promised not to" is a policy, and
 the security team is right not to trust it.
 
-**The claims we owe them, each with the evidence that backs it:**
+**The claims we owe them, each with the evidence that backs it.** The
+status column says what's built today and which test backs it. Tests live
+in `tests/test_work_homes.py` and `tests/test_no_network.py`; they run on
+invented fixtures (`python -m pytest -q`).
 
-| Claim | Evidence they can check themselves |
-| --- | --- |
-| The installed plate is exactly the published one | It's a read-only package. Its hash matches the public release, so a reproducible build gives the same bytes. |
-| Nothing at work writes into the plate | The plate is installed read-only (root-owned, `0444`). Work state lives in a separate *work home*. A test proves a plate's hash is unchanged after a full work session. |
-| The runtime doesn't phone home | gremlincore has no network code. A test fails the build if a network import ever appears. They can also watch it under a firewall. |
-| The only egress is the model | `gremlin talk` is Claude Code, under the employer's existing Claude Code policy (their account, their settings, their data terms). Nothing else leaves the machine. |
-| The extractor never runs at work | A work home sets `work = true`. meatbag refuses to run in one, and `bring` refuses to export from one. Tested. |
-| Work context stays at work | `gremlin context add <repo>` stores context in the work home, outside `persona/`, excluded from every export path. Tested: a plate exported after adding context is byte-identical to one exported before. |
-| It's all auditable | MIT license, open source, an SBOM, and an audit log of every agent action in the work home. |
+| Claim | Evidence they can check themselves | Status |
+| --- | --- | --- |
+| The installed plate is exactly the published one | It's a read-only package. Its hash matches the public release, so a reproducible build gives the same bytes. | **Open.** Needs packaging. Today's piece: `gremlin plate export` writes the same bytes from the same home (no timestamps) plus a `MANIFEST.sha256`. Nothing publishes or installs a plate yet. |
+| Nothing at work writes into the plate | The plate is installed read-only (root-owned, `0444`). Work state lives in a separate *work home*. A test proves a plate's hash is unchanged after a full work session. | **Partly built.** Work homes exist: `gremlin init --work` writes `work = true`, and `gremlin wake` opens with "WORK HOME: nothing here becomes a plate." (`test_init_work_writes_work_true_and_wake_says_so`). **Open:** the read-only install and the hash-after-a-work-session test, which need packaging. |
+| The runtime doesn't phone home | gremlincore has no network code. A test fails the build if a network import ever appears. They can also watch it under a firewall. | **Built.** `test_runtime_has_no_network_imports` scans every module in `gremlincore/` for network imports, including string imports through `__import__` and `importlib`; `test_the_scanner_catches_a_planted_import` shows it can fail. It's a static check of our code: it doesn't cover third-party dependencies (textual, rich) or `gremlin talk`, which execs Claude Code. The firewall check is theirs to run. |
+| The only egress is the model | `gremlin talk` is Claude Code, under the employer's existing Claude Code policy (their account, their settings, their data terms). Nothing else leaves the machine. | **Stated, not tested.** The no-network test backs the runtime half. Nothing tests what Claude Code itself sends. |
+| The extractor never runs at work | A work home sets `work = true`. meatbag refuses to run in one, and `bring` refuses to export from one. Tested. | **Built, for a home marked as work.** Every meatbag command exits 4 in a work home before reading anything (`test_every_meatbag_command_refuses_in_a_work_home`), so does every module run with `python -m` (`test_meatbag_modules_refuse_when_run_directly`), and so does a cwd inside a work home when `GREMLIN_HOME` points elsewhere. `bring` isn't built; `gremlin plate export`, which it will call, refuses a work home (`test_export_refuses_in_a_work_home`). The flag is the owner's to set: a home nobody marked is not protected, and nothing stops someone copying files by hand. |
+| Work context stays at work | `gremlin context add <repo>` stores context in the work home, outside `persona/`, excluded from every export path. Tested: a plate exported after adding context is byte-identical to one exported before. | **Built, for the export path.** `gremlin context add/list/remove` keeps a list of paths plus metadata in `context/contexts.json` and copies nothing (`test_context_add_list_remove_keeps_pointers_only`). The export is an allowlist: persona/*.md, STATUS.md, plate.toml, the manifest. An export after `context add` is byte-identical to one before (`test_export_after_context_add_is_byte_identical`); it holds no file from context/, the queue, the ledgers or the lessons, and refuses symlinks (`test_export_is_the_allowlist_and_nothing_else`, `test_export_refuses_a_symlink_on_the_allowlist`). **Still policy, not construction:** an agent that writes context into `persona/` or STATUS.md by hand would get it exported. The skill tells it not to; nothing enforces that yet. |
+| It's all auditable | MIT license, open source, an SBOM, and an audit log of every agent action in the work home. | **Partly.** MIT and open source, yes. No SBOM and no audit log yet. |
 
 **The leak path that isn't on the work box, and is the hard part:** your
 *personal* AI chats about work. If you talked a work problem through with
@@ -82,7 +85,8 @@ needs:
 - a **default of exclude when unsure**.
 
 This is the problem we can't fully solve with filesystem permissions,
-and we won't claim we have.
+and we won't claim we have. **Status: unsolved.** None of the three is
+built.
 
 **Done when:** a security reviewer who isn't us gets the claims table,
 the tests, and a work home to poke at, and can't find a path for work
