@@ -92,14 +92,18 @@ embarrassing first. meatbag lets you choose what goes in, and the
 landlord from becoming a strategy move. Choose like you mean it. Then
 choose again for everyone else in there.
 
-### Not on your work machine. Not yet.
+### Don't run meatbag on the work box. Not yet.
 
-That weird project someone pasted in Slack called "gremlincore"? Don't run
-it on the work box. There's no line yet between *who you are* (the
-persona) and *what your employer owns* (their code, their docs, their
-commit history). Until that line is built and tested, a plate can soak up
-proprietary stuff, and a plate is the thing you share. Run it at home, on
-your own exports.
+That weird project someone pasted in Slack? **meatbag** is the part that
+reads: chat exports, Claude Code sessions, repos. Point it at the work box
+and nothing yet separates *who you are* (the persona) from *what your
+employer owns* (their code, their docs, their commit history), and a
+persona is the thing you share. Run meatbag at home, on your own exports.
+
+**gremlincore** (the runtime) extracts nothing, so it's fine at work. But
+it writes: queue drafts, ledgers, lessons, STATUS, and sometimes its own
+persona notes. A home on the work box is a work home. Never bring a plate
+from it; bring from the home you built yourself.
 
 ## Quickstart
 
