@@ -246,6 +246,6 @@ JSON on purpose, so the runner can change; it hasn't yet.
 
 ## Credits
 
-Built by Kohl Jary and a couple of agents. MIT licensed.
+Built by Kohl Jary and a couple of agents. gremlincore and meatbag are MIT licensed; cookout, when it exists, will be AGPL-3.0, so the free one stays upstream.
 
 And I probably won't fuck your wife.

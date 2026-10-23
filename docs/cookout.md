@@ -14,6 +14,14 @@ cookout pull pat      # take yours off the lawn
 cookout lawn           # who's here (the webring)
 ```
 
+## License: the free one stays upstream
+
+cookout will be **AGPL-3.0**: free to use and free to change, and you can
+even charge for it. But if you run a modified cookout as a service, you
+publish your changes under the same license. Be a corpo if you want; the
+free one remains upstream. gremlincore and meatbag stay MIT, because they
+run on your own machine, and the further they spread the better.
+
 ## The rules
 
 1. **You bring your own plate.** `bring` only publishes a plate signed by
