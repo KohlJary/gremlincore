@@ -100,10 +100,12 @@ and nothing yet separates *who you are* (the persona) from *what your
 employer owns* (their code, their docs, their commit history), and a
 persona is the thing you share. Run meatbag at home, on your own exports.
 
-**gremlincore** (the runtime) extracts nothing, so it's fine at work. But
-it writes: queue drafts, ledgers, lessons, STATUS, and sometimes its own
-persona notes. A home on the work box is a work home. Never bring a plate
-from it; bring from the home you built yourself.
+**gremlincore** (the runtime) is fine at work. It extracts nothing and
+phones nobody. The only thing that leaves the machine is `gremlin talk`,
+which is just Claude Code, so if your employer lets you use Claude Code
+on their code, your little guy can come to work too. Just don't take him
+to the cookout afterwards: a plate brought from a work home smells like
+someone else's codebase.
 
 ## Quickstart
 
