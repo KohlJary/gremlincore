@@ -92,6 +92,15 @@ embarrassing first. meatbag lets you choose what goes in, and the
 landlord from becoming a strategy move. Choose like you mean it. Then
 choose again for everyone else in there.
 
+### Not on your work machine. Not yet.
+
+That weird project someone pasted in Slack called "gremlincore"? Don't run
+it on the work box. There's no line yet between *who you are* (the
+persona) and *what your employer owns* (their code, their docs, their
+commit history). Until that line is built and tested, a plate can soak up
+proprietary stuff, and a plate is the thing you share. Run it at home, on
+your own exports.
+
 ## Quickstart
 
 Needs Python 3.11+, [Ollama](https://ollama.com) with `qwen3:8b` (or any
@@ -150,6 +159,12 @@ Personality loose, judgment stone-cold sober.
    The agent doesn't read their data and doesn't speak for them.
 5. **Count the fuckups.** Every mistake gets a WF entry naming the change
    that stops the next one. Hiding one is the worst entry there is.
+6. **Who you are is not what you work on.** The persona (who you are)
+   travels with the plate. Context (an employer's repos, docs and commit
+   history) is added on the machine it belongs to, and never flows back
+   into the plate. *Planned, not built:* `gremlin context add <repo>`,
+   kept outside `persona/`, excluded from export, with a test that a plate
+   built after adding context is byte-identical to one built before.
 
 ## Honest status
 
