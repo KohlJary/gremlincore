@@ -22,6 +22,7 @@ from gremlincore.home import config
 
 from . import paths
 from .local_llm import chat_json
+from meatbag import work_guard
 
 GLOSS = {
     "strategy": "planning the mission, priorities, positioning, what to do next",
@@ -160,6 +161,7 @@ def moves(model, cfg=None, skip_domains=()):
                 print(f"{i}/{len(todo)} {time.time()-t0:.0f}s", file=sys.stderr)
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag mine")
     ap.add_argument("stage", choices=["tag", "moves"])
@@ -170,6 +172,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    from meatbag import refuse_work_home
-    refuse_work_home()
     main()

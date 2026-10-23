@@ -15,9 +15,9 @@ context/, the queue, both ledgers (so the lessons, which are read from the
 queue), corpus/, data/, eval/, .claude/. The output has no timestamps, so
 the same home exports to the same bytes.
 
-It refuses to run in a work home (`work = true`), and refuses a symlink
-anywhere on the allowlist, since a link is how a file outside it would
-ride along.
+It refuses to run in a work home (anything but a clearly false `work`), and refuses a symlink
+or a hardlinked file (link count above 1) anywhere on the allowlist, since
+a link is how a file outside it would ride along.
 """
 import argparse
 import hashlib
@@ -35,6 +35,12 @@ def _toml_str(v):
     return '"' + str(v).replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+def _no_hardlink(p):
+    if p.stat().st_nlink > 1:
+        raise SystemExit(f"{p} has {p.stat().st_nlink} hard links. Refusing: another name for "
+                         "the same bytes could be a file outside the allowlist. Copy it instead.")
+
+
 def allowlist(h):
     """[(relative path in the plate, source path)] for every file that goes."""
     h = Path(h)
@@ -50,11 +56,13 @@ def allowlist(h):
                 raise SystemExit(f"{p} is a symlink. Refusing: a link is how something outside "
                                  "the allowlist would ride along.")
             if p.is_file():
+                _no_hardlink(p)
                 out.append((f"{PERSONA}/{p.name}", p))
     st = h / STATUS
     if st.is_symlink():
         raise SystemExit(f"{st} is a symlink. Refusing.")
     if st.is_file():
+        _no_hardlink(st)
         out.append((STATUS, st))
     return out
 
@@ -72,8 +80,7 @@ def plate_toml(cfg):
 
 def export(out, h=None):
     h = Path(h or root())
-    cfg = home.config(h)
-    if home.is_work(cfg):
+    if home.is_work(home=h):  # before config(): a gremlin.toml that won't parse is work too
         raise SystemExit(f"{h} is a WORK HOME (work = true): nothing here becomes a plate. "
                          "Export from your personal home.")
     out = Path(out).expanduser()
@@ -81,6 +88,7 @@ def export(out, h=None):
         raise SystemExit(f"{out} exists and isn't an empty directory. Not writing over it.")
     if (h / PERSONA).resolve() in (out.resolve(), *out.resolve().parents):
         raise SystemExit(f"{out} is inside persona/. Export somewhere else.")
+    cfg = home.config(h)
     files = {rel: src.read_bytes() for rel, src in allowlist(h)}
     files["plate.toml"] = plate_toml(cfg).encode()
     manifest = "".join(f"{hashlib.sha256(b).hexdigest()}  {rel}\n" for rel, b in sorted(files.items()))

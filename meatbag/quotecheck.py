@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from . import paths
+from meatbag import work_guard
 
 MARK = " *(not verbatim)*"
 
@@ -64,6 +65,7 @@ def score(q, T):
 QUOTE = re.compile(r'"([^"\n]{20,}(?:\n[^"\n]+){0,3})"')
 
 
+@work_guard
 def main(argv=None):
     a = sys.argv[1:] if argv is None else argv
     if not a or a[0] in ("-h", "--help"):
@@ -96,6 +98,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    from meatbag import refuse_work_home
-    refuse_work_home()
     main()

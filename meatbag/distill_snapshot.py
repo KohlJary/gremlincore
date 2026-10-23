@@ -12,6 +12,7 @@ from gremlincore.home import config
 
 from . import paths
 from .filters import generalizable_move, is_paste
+from meatbag import work_guard
 
 
 def era(ts, cfg=None):
@@ -25,6 +26,7 @@ def era(ts, cfg=None):
     return cfg["corpus"]["last_era"]
 
 
+@work_guard
 def main(argv=None):
     cfg = config()
     owner, skip = cfg["owner"]["name"], set(cfg["corpus"]["skip_in_distill"])
@@ -59,6 +61,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    from meatbag import refuse_work_home
-    refuse_work_home()
     main()

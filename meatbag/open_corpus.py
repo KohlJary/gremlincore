@@ -11,10 +11,12 @@ import shutil
 from gremlincore.home import pipeline_dir
 
 from . import paths
+from meatbag import work_guard
 
 FULL = ["turns.jsonl", "moves_raw.jsonl", "conv_tags.jsonl", "gremlin_sorted.jsonl"]
 
 
+@work_guard
 def main(argv=None):
     held = set(json.loads(paths.evaldir("holdout_convs.json").read_text())["conv_ids"])
     out = paths.corpus()
@@ -38,6 +40,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    from meatbag import refuse_work_home
-    refuse_work_home()
     main()

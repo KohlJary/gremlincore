@@ -1,4 +1,5 @@
 """meatbag: your AI-chat exports in, a persona corpus out. Local passes on Ollama."""
+import functools
 import sys
 
 WORK_EXIT = 4
@@ -31,3 +32,14 @@ def refuse_work_home():
               "meatbag is the part that reads, and nothing in a work home becomes a plate.\n"
               "Run it at home, on your own exports.", file=sys.stderr)
         raise SystemExit(WORK_EXIT)
+
+
+def work_guard(fn):
+    """Wrap an entry point so it refuses in a work home, however it's
+    reached: the CLI, `python -m meatbag.<mod>`, or `import` and call."""
+    @functools.wraps(fn)
+    def guarded(*args, **kwargs):
+        refuse_work_home()
+        return fn(*args, **kwargs)
+    guarded.work_guarded = True
+    return guarded

@@ -66,10 +66,39 @@ def test_cli_init_work(tmp_path, capsys):
     assert home.is_work(home=tmp_path / "w")
 
 
-@pytest.mark.parametrize("value", [True, "true", "yes", "1"])
-def test_work_flag_reads_like_yes(tmp_path, value):
-    (tmp_path / "gremlin.toml").write_text(f"work = {json.dumps(value)}\n")
+@pytest.mark.parametrize("line", [
+    "work = true", 'work = "true"', 'work = "yes"', 'work = "maybe"', 'work = ""', "work = 1",
+    "work = 2.5", "work = [false]", "Work = true", "WORK = false\nwork = true",
+    'Work = "maybe"', "[work]\nenabled = false"])
+def test_work_flag_fails_closed(tmp_path, monkeypatch, line, capsys):
+    """Anything that isn't clearly false is a work home."""
+    (tmp_path / "gremlin.toml").write_text(line + "\n")
     assert home.is_work(home=tmp_path)
+    monkeypatch.setenv("GREMLIN_HOME", str(tmp_path))
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(SystemExit) as e:
+        meatbag_main(["sort"])
+    assert e.value.code == meatbag.WORK_EXIT
+
+
+@pytest.mark.parametrize("line", ["work = false", 'work = "false"', 'work = "No"', "work = 0",
+                                  'work = "off"', "", "# work = true"])
+def test_work_flag_clearly_false(tmp_path, line):
+    (tmp_path / "gremlin.toml").write_text(line + "\n")
+    assert not home.is_work(home=tmp_path)
+
+
+def test_malformed_toml_fails_closed(tmp_path, monkeypatch):
+    (tmp_path / "gremlin.toml").write_text("work = fals\n[owner\n")
+    assert home.is_work(home=tmp_path)
+    monkeypatch.setenv("GREMLIN_HOME", str(tmp_path))
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(SystemExit) as e:
+        meatbag_main(["normalize"])
+    assert e.value.code != 0
+    with pytest.raises(SystemExit):
+        plate.export(tmp_path / "out")
+    assert not (tmp_path / "out").exists()
 
 
 # --- meatbag refuses in a work home -----------------------------------------
@@ -96,6 +125,33 @@ def test_meatbag_modules_refuse_when_run_directly(mod, tmp_path, monkeypatch):
                        text=True, env={**os.environ, "PYTHONPATH": str(ROOT)})
     assert r.returncode == meatbag.WORK_EXIT, r.stderr
     assert "refuses to run in a work home" in r.stderr
+
+
+GUARDED = [(m, "main") for m in MODULES] + [("stubs", "distill"), ("stubs", "select_cases")]
+
+
+@pytest.mark.parametrize("mod,fn", GUARDED)
+def test_meatbag_entry_points_refuse_when_imported_and_called(mod, fn, tmp_path, monkeypatch, capsys):
+    """`import meatbag.normalize; normalize.main([...])` is refused too, not only the CLI."""
+    import importlib
+    h = _home(tmp_path, monkeypatch, work=True)
+    before = _tree(h)
+    entry = getattr(importlib.import_module(f"meatbag.{mod}"), fn)
+    assert getattr(entry, "work_guarded", False), f"meatbag.{mod}.{fn} isn't wrapped in work_guard"
+    with pytest.raises(SystemExit) as e:
+        entry(["anything"])
+    assert e.value.code == meatbag.WORK_EXIT
+    assert "refuses to run in a work home" in capsys.readouterr().err
+    assert _tree(h) == before
+
+
+def test_every_meatbag_main_is_guarded():
+    """A new module with a main() has to be wrapped, or this fails."""
+    import importlib
+    for p in sorted((ROOT / "meatbag").glob("*.py")):
+        m = importlib.import_module(f"meatbag.{p.stem}")
+        if p.stem not in ("cli", "__init__") and hasattr(m, "main"):
+            assert getattr(m.main, "work_guarded", False), p.name
 
 
 def test_meatbag_refuses_when_cwd_is_a_work_home_but_env_points_elsewhere(tmp_path, monkeypatch, capsys):
@@ -223,6 +279,17 @@ def test_export_refuses_a_symlink_on_the_allowlist(tmp_path, monkeypatch):
     repo = _employer_repo(tmp_path)
     (h / "persona/ACME.md").symlink_to(repo / "README.md")
     with pytest.raises(SystemExit, match="symlink"):
+        plate.export(tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+@pytest.mark.parametrize("target", ["persona/ACME.md", "STATUS.md"])
+def test_export_refuses_a_hardlink_on_the_allowlist(target, tmp_path, monkeypatch):
+    h = _home(tmp_path, monkeypatch)
+    repo = _employer_repo(tmp_path)
+    (h / target).unlink(missing_ok=True)
+    os.link(repo / "README.md", h / target)
+    with pytest.raises(SystemExit, match="hard links"):
         plate.export(tmp_path / "out")
     assert not (tmp_path / "out").exists()
 

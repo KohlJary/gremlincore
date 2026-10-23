@@ -115,13 +115,29 @@ def config(home=None):
     return cfg
 
 
+CLEARLY_FALSE = ("false", "no", "0", "off")
+
+
 def is_work(cfg=None, home=None):
-    """True when the home is a work home. Anything that reads like yes counts:
-    a guard that a typo can switch off isn't one."""
-    v = (cfg or config(home)).get("work", False)
-    if isinstance(v, str):
-        return v.strip().lower() in ("true", "yes", "1", "on")
-    return bool(v)
+    """True unless the home clearly says it isn't a work home. Fails closed:
+    a key spelled `Work` or `WORK`, a value like "maybe", a number other than
+    0, a table, or a gremlin.toml that won't parse all count as work. A guard
+    that a typo can switch off isn't one. No `work` key at all means a
+    personal home (every home from before work homes existed)."""
+    if cfg is None:
+        p = Path(home or root()) / CONFIG_NAME
+        try:
+            cfg = tomllib.loads(p.read_text()) if p.exists() else {}
+        except (tomllib.TOMLDecodeError, UnicodeDecodeError, OSError):
+            return True
+    vals = [v for k, v in cfg.items() if isinstance(k, str) and k.strip().lower() == "work"]
+    return any(not _clearly_false(v) for v in vals)
+
+
+def _clearly_false(v):
+    if v is False or (type(v) is int and v == 0):
+        return True
+    return isinstance(v, str) and v.strip().lower() in CLEARLY_FALSE
 
 
 def slug(name):
