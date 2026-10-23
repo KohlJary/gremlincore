@@ -105,3 +105,11 @@ def test_the_eval_has_a_wall_not_a_sign(fresh):
     assert any(d.startswith("Read(/") and d.endswith("/eval/**)") for d in deny), "the eval store is walled too"
     assert "mcp__claude_ai_Gmail__send_message" in deny, "you draft; the owner sends"
     assert not list(fresh.rglob("cases_*.jsonl")), "Eval case text is inside the home. Wall, not a sign."
+
+
+def test_force_push_waits_for_you():
+    # "He might suggest git push --force and then, crucially, wait for you to say yes."
+    import json
+    s = json.loads((ROOT / "templates/.claude/settings.json").read_text())
+    ask = s["permissions"].get("ask", [])
+    assert any("--force" in r for r in ask) and any("-f" in r for r in ask)
