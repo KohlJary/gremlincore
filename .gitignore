@@ -1,0 +1,8 @@
+# Anything derived from someone's transcripts stays local. Never commit it.
+data/
+corpus/
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/

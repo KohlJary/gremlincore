@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gremlincore"
+version = "0.0.1"
+description = "Your computer should have a little guy in it. Open-source, model-agnostic, agentic computing."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Kohl Jary"}]
+requires-python = ">=3.11"
+dependencies = ["textual>=8.0", "rich"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[project.scripts]
+gremlin = "gremlincore.cli:main"
+meatbag = "meatbag.cli:main"
+
+[tool.setuptools]
+packages = ["gremlincore", "meatbag"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+meatbag = ["*.sh"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
