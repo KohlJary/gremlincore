@@ -66,11 +66,11 @@ The product is that your computer has a little guy in it.
 
 The business model is that the little guy is so fucking funny that you tell your friends about him.
 
-The distribution strategy is that your friend installs him, and now their computer has a little guy in it.
+The distribution strategy is that your friend installs him, feeds him their own exports, and now their computer has a little guy in it.
 
 The moat is that he's your little guy.
 
-The safety model is that he doesn't phone anyone but the model he runs on, doesn't steal your shit, and doesn't make decisions you didn't authorize. He can, however, tell you your boss is being a fuckman Greg.
+The safety model is that he doesn't phone anyone but the model he runs on and whatever you plug in, doesn't steal your shit, and doesn't send anything under your name until you click. He can, however, tell you your boss is being a fuckman Greg.
 
 And the roadmap?
 
