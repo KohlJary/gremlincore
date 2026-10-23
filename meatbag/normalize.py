@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from gremlincore.home import root
+from meatbag import work_guard
 
 
 def _load(path):
@@ -95,6 +96,7 @@ def turns(path):
     return claude_turns(convs)
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag normalize")
     ap.add_argument("exports", nargs="+")

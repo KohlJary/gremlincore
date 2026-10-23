@@ -24,6 +24,7 @@ import tempfile
 from pathlib import Path
 
 from gremlincore.home import config, eval_dir, root, slug
+from meatbag import work_guard
 
 NEUTRAL_SYS = ("Rewrite the answer you are given into flat, neutral, plain prose. Keep every "
                "recommendation, its order, and its first concrete step. Remove all voice, humor, "
@@ -125,6 +126,7 @@ def renormalize():
     print("re-neutralized", len(blind), "answers; same key, no answer regenerated")
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag arms")
     ap.add_argument("--renormalize", action="store_true")

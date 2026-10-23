@@ -33,6 +33,10 @@ def today():
 
 # Everything a stranger's agent needs to not be somebody else's.
 DEFAULTS = {
+    # A work home (`gremlin init --work`) runs at work: nothing in it becomes
+    # a plate. meatbag refuses to run in one and `gremlin plate export`
+    # refuses to export from one.
+    "work": False,
     "owner": {"name": "you", "pronouns": "they/them"},
     "agent": {"name": "gremlin", "symbol": "⊖"},
     "paths": {
@@ -109,6 +113,31 @@ def config(home=None):
     cfg["paths"]["pipeline"] = str(Path(cfg["paths"]["pipeline"] or base / "pipeline").expanduser())
     cfg["paths"]["eval"] = str(Path(cfg["paths"]["eval"] or base / "eval").expanduser())
     return cfg
+
+
+CLEARLY_FALSE = ("false", "no", "0", "off")
+
+
+def is_work(cfg=None, home=None):
+    """True unless the home clearly says it isn't a work home. Fails closed:
+    a key spelled `Work` or `WORK`, a value like "maybe", a number other than
+    0, a table, or a gremlin.toml that won't parse all count as work. A guard
+    that a typo can switch off isn't one. No `work` key at all means a
+    personal home (every home from before work homes existed)."""
+    if cfg is None:
+        p = Path(home or root()) / CONFIG_NAME
+        try:
+            cfg = tomllib.loads(p.read_text()) if p.exists() else {}
+        except (tomllib.TOMLDecodeError, UnicodeDecodeError, OSError):
+            return True
+    vals = [v for k, v in cfg.items() if isinstance(k, str) and k.strip().lower() == "work"]
+    return any(not _clearly_false(v) for v in vals)
+
+
+def _clearly_false(v):
+    if v is False or (type(v) is int and v == 0):
+        return True
+    return isinstance(v, str) and v.strip().lower() in CLEARLY_FALSE
 
 
 def slug(name):

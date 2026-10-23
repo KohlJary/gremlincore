@@ -18,6 +18,7 @@ from gremlincore.home import config
 from . import paths
 from .filters import is_paste
 from .local_llm import chat_json
+from meatbag import work_guard
 
 # Invented. Nobody said these; they show the shape.
 GREMLIN_EXAMPLES = [
@@ -67,6 +68,7 @@ def system(cfg=None):
     )
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag sort")
     ap.add_argument("--model")

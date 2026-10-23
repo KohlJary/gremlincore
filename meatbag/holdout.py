@@ -18,12 +18,14 @@ from collections import defaultdict
 from gremlincore.home import config
 
 from . import paths
+from meatbag import work_guard
 
 SEED = 20261022
 FRACTION = 0.25
 KINDS = {"premise", "ambition", "framing", "ethics", "tactics", "scope"}
 
 
+@work_guard
 def main(argv=None):
     cfg = config()
     domains = set(cfg["corpus"]["eval_domains"]) & set(cfg["corpus"]["domains"])

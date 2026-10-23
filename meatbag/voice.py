@@ -23,6 +23,7 @@ from pathlib import Path
 from gremlincore.home import config
 
 from . import paths
+from meatbag import work_guard
 
 
 def _gh(*args):
@@ -115,6 +116,7 @@ def sources(days, cfg=None):
             ("rss", lambda: rss(v["rss_feeds"]))]
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag voice")
     ap.add_argument("--days", type=float, default=4)

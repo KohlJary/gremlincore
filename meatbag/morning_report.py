@@ -11,6 +11,7 @@ import random
 from gremlincore.home import pipeline_dir, today
 
 from . import paths
+from meatbag import work_guard
 
 CATEGORIES = ("gremlin", "out_there", "hurt")  # follow sort_gremlin's categories
 
@@ -52,6 +53,7 @@ def report():
     return "\n".join(out)
 
 
+@work_guard
 def main(argv=None):
     paths.data().mkdir(parents=True, exist_ok=True)
     paths.data("morning-report.md").write_text(report())

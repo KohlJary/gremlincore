@@ -1,6 +1,11 @@
 """Scaffold a new home: the place an agent lives.
 
-  gremlin init ~/greg-bot --owner Greg --pronouns he/him --agent RoboGreg [--symbol ⊖]
+  gremlin init ~/greg-bot --owner Greg --pronouns he/him --agent RoboGreg [--symbol ⊖] [--work]
+
+--work makes a work home: `work = true` in gremlin.toml. Nothing in a work
+home becomes a plate. meatbag refuses to run in one, `gremlin plate export`
+refuses to export from one, and work context (`gremlin context add`) stays
+a list of paths in context/.
 
 Writes gremlin.toml, the persona/ skeleton, STATUS.md, empty ledgers, the
 queue, .claude/settings.json (the walls), CLAUDE.md and the skill. It
@@ -42,7 +47,8 @@ def plan(home, values):
         "ledger/README.md": render((t / "ledger/README.md").read_text(), values),
         "ledger/predictions.jsonl": "",
         "ledger/wf.jsonl": "",
-        ".gitignore": "# Derived from transcripts: never committed.\ndata/\ncorpus/\neval/cases*\n",
+        ".gitignore": ("# Derived from transcripts: never committed.\ndata/\ncorpus/\neval/cases*\n"
+                       "# Where work context lives on this machine: not for a public remote.\ncontext/\n"),
     }
     for p in sorted((t / "persona").glob("*.md")):
         files[f"persona/{p.name}"] = render(p.read_text(), values)
@@ -51,7 +57,15 @@ def plan(home, values):
     return files
 
 
-def init(home, owner, pronouns, agent, symbol=None, git=True):
+WORK_LINE = ("# WORK HOME: nothing here becomes a plate. meatbag refuses to run here,\n"
+             "# and `gremlin plate export` refuses to export from here.\n"
+             "work = true")
+PERSONAL_LINE = ("# A personal home. `gremlin init --work` makes a work home instead, one\n"
+                 "# that meatbag and `gremlin plate export` refuse to touch.\n"
+                 "work = false")
+
+
+def init(home, owner, pronouns, agent, symbol=None, git=True, work=False):
     home = Path(home).expanduser()
     if (home / CONFIG_NAME).exists():
         raise SystemExit(f"{home} already has a {CONFIG_NAME}: that's somebody's home. Not touching it.")
@@ -61,7 +75,8 @@ def init(home, owner, pronouns, agent, symbol=None, git=True):
     values = {"owner": owner, "pronouns": pronouns, "agent": agent,
               "symbol": symbol or DEFAULTS["agent"]["symbol"], "slug": slug(agent),
               "owner_id": slug(owner), "today": today(),
-              "closing": DEFAULTS["wake"]["closing"]}
+              "closing": DEFAULTS["wake"]["closing"],
+              "work_line": WORK_LINE if work else PERSONAL_LINE}
     base = Path.home() / ".local/share/gremlincore" / values["slug"]
     values["eval_store"] = str(base / "eval")
     values["pipeline_store"] = str(base / "pipeline")
@@ -90,9 +105,16 @@ def main(argv=None):
     ap.add_argument("--agent", required=True)
     ap.add_argument("--symbol")
     ap.add_argument("--no-git", action="store_true")
+    ap.add_argument("--work", action="store_true",
+                    help="a work home: nothing here becomes a plate")
     a = ap.parse_args(argv)
-    home, cfg = init(a.dir, a.owner, a.pronouns, a.agent, a.symbol, git=not a.no_git)
+    home, cfg = init(a.dir, a.owner, a.pronouns, a.agent, a.symbol, git=not a.no_git, work=a.work)
     print(f"{cfg['agent']['name']} has a home: {home}")
+    if a.work:
+        print("WORK HOME: nothing here becomes a plate. meatbag won't run here.")
+        print("Add work context with `gremlin context add <repo>`; it stays a list of paths.")
+        print(f"Talk to it: `cd {home} && gremlin talk`.")
+        return 0
     print(f"  pipeline store: {cfg['paths']['pipeline']}")
     print(f"  eval store:     {cfg['paths']['eval']}")
     print("Next: export your AI chats, then `meatbag normalize <export.zip>` from the home.")

@@ -1,7 +1,9 @@
 """gremlin: the runtime.
 
-  gremlin init DIR --owner NAME --pronouns P --agent NAME [--symbol S]
+  gremlin init DIR --owner NAME --pronouns P --agent NAME [--symbol S] [--work]
   gremlin queue|ledger|wf|lessons|wake|tui ...
+  gremlin context add PATH | list | remove PATH|NAME   work context, kept as pointers
+  gremlin plate export OUT     persona/ + STATUS, allowlisted (refuses in a work home)
   gremlin talk [claude args]   start a Claude Code session as the agent, from its home
 """
 import os
@@ -10,7 +12,7 @@ import sys
 
 from . import home
 
-COMMANDS = ("init", "queue", "ledger", "wf", "lessons", "wake", "tui", "talk")
+COMMANDS = ("init", "queue", "ledger", "wf", "lessons", "wake", "tui", "talk", "context", "plate")
 
 
 def talk(argv):

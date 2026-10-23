@@ -36,6 +36,8 @@ def brief(on=None):
     on = on or today()
     cfg = home.config()
     lines = []
+    if home.is_work(cfg):
+        lines.append("WORK HOME: nothing here becomes a plate.")
     sd, lc = status_date(), last_change()
     if sd and lc and lc > sd:
         lines.append(f"!! STATUS IS STALE: last updated {sd}, but persona/skill changed {lc}. "
@@ -60,6 +62,10 @@ def brief(on=None):
     for i, st, kind, to, age, stale in rows:
         if st in ("pending", "approved", "edited"):
             lines.append(f"  - {i} {st} {age}d {to[:50]}" + ("  STALE: make it smaller" if stale else ""))
+    if home.is_work(cfg):
+        from . import context
+        cs = context.entries()
+        lines.append(f"Work context: {len(cs)} path(s), listed in context/, never in persona/")
     ls = lessons.lessons()
     lines.append(f"Lessons from {cfg['owner']['name']}'s red pen: {len(ls)}")
     for l in ls[-5:]:
