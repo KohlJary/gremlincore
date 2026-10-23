@@ -14,9 +14,16 @@ museum piece wearing your name.
 
 **What "current" has to mean:**
 
-- **Versioned.** Every plate has a version, and every version is the
-  owner's red-penned output, never an automatic one. meatbag can propose
-  a new version from new exports. Only the owner can bump it.
+- **Versioned, owner-approved by default.** Every plate has a version.
+  By default, meatbag proposes a new version from new exports and only the
+  owner can bump it.
+- **Automatic, if you opt in.** An owner can switch on automatic updates:
+  meatbag folds new exports into the plate as they arrive, and a
+  **periodic assessment** (monthly by default, owner's choice) puts every
+  change since the last one in front of the owner to confirm or revise.
+  Automatic changes are marked provisional until an assessment confirms
+  them. A skipped assessment pauses automatic updates; it doesn't wave
+  them through. Off by default, one switch to turn it on or off.
 - **Incremental.** Re-running meatbag on new exports proposes a *diff*
   to the persona (new convictions, retired ones, changed moves), each with
   its receipts, instead of rebuilding from scratch. An old belief the
@@ -36,8 +43,9 @@ museum piece wearing your name.
 
 **Done when:** an owner adds three months of new exports, meatbag proposes
 a diff with receipts, the owner red-pens it into v2, and a tethered
-grabber gets v2 while a pinned one stays on v1, all in tests on invented
-fixtures.
+grabber gets v2 while a pinned one stays on v1. And with automatic
+updates on, the changes land provisionally, the assessment shows all of
+them, and a revision there wins. All in tests on invented fixtures.
 
 ---
 
