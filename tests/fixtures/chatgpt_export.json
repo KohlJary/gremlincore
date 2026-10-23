@@ -1,0 +1,129 @@
+[
+ {
+  "title": "HOA bounce castle",
+  "create_time": 1735000000.0,
+  "conversation_id": "g-0001",
+  "current_node": "a2",
+  "mapping": {
+   "root": {
+    "id": "root",
+    "parent": null,
+    "children": [
+     "sys"
+    ],
+    "message": null
+   },
+   "sys": {
+    "id": "sys",
+    "parent": "root",
+    "children": [
+     "u1"
+    ],
+    "message": {
+     "author": {
+      "role": "system"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "You are a helpful assistant."
+      ]
+     },
+     "create_time": 1735000000
+    }
+   },
+   "u1": {
+    "id": "u1",
+    "parent": "sys",
+    "children": [
+     "a1"
+    ],
+    "message": {
+     "author": {
+      "role": "user"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Chad wants to rent a bounce castle for the HOA meeting."
+      ]
+     },
+     "create_time": 1735000010
+    }
+   },
+   "a1": {
+    "id": "a1",
+    "parent": "u1",
+    "children": [
+     "u2"
+    ],
+    "message": {
+     "author": {
+      "role": "assistant"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "That could be a fun icebreaker! Consider liability waivers."
+      ]
+     },
+     "create_time": 1735000020
+    }
+   },
+   "u2": {
+    "id": "u2",
+    "parent": "a1",
+    "children": [
+     "a2-old",
+     "a2"
+    ],
+    "message": {
+     "author": {
+      "role": "user"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Waivers are how they win. We bounce first and apologize in the minutes."
+      ]
+     },
+     "create_time": 1735000030
+    }
+   },
+   "a2-old": {
+    "id": "a2-old",
+    "parent": "u2",
+    "children": [],
+    "message": {
+     "author": {
+      "role": "assistant"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "OLD BRANCH: Please reconsider."
+      ]
+     },
+     "create_time": 1735000035
+    }
+   },
+   "a2": {
+    "id": "a2",
+    "parent": "u2",
+    "children": [],
+    "message": {
+     "author": {
+      "role": "assistant"
+     },
+     "content": {
+      "content_type": "text",
+      "parts": [
+       "Bounce first, minutes later. Got it."
+      ]
+     },
+     "create_time": 1735000040
+    }
+   }
+  }
+ }
+]
