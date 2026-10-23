@@ -138,7 +138,7 @@ Personality loose, judgment stone-cold sober.
 
 1. **You draft; the owner sends.** Everything that leaves the machine
    under your name waits in `queue/` for your click. Nothing in this repo
-   sends anything. The home's Claude settings deny the send-type mail
+   sends anything on your behalf (the voice collector only reads). The home's Claude settings deny the send-type mail
    tools. Your edits and vetoes are kept, because they're the best
    training data this thing will ever get.
 2. **Bets before checks.** Every prediction goes in `ledger/` before it's
@@ -158,10 +158,10 @@ Built, and tested against invented fixtures (`python -m pytest -q`):
 - the home, `gremlin init`, the config, the queue, both ledgers, lessons
   from your red pen, the wake brief, the TUI;
 - normalize for Claude and ChatGPT exports (synthetic fixtures only);
-- the filters, the voice collector (reads nothing by default), the
-  eval-arm runner.
+- the filters, the voice collector (reads nothing by default).
 
-Built, not tested here: the local-model passes (`mine`, `sort`, `hunt`)
+Built, not tested here: the eval-arm runner (it calls `claude -p`, so
+there's no offline test yet), and the local-model passes (`mine`, `sort`, `hunt`)
 need a running Ollama and a real corpus, so the tests cover their prompts
 and plumbing, not their judgment. A small local model is a coarse recall
 filter: it flags a lot that isn't gremlin. The real sorting is a stronger

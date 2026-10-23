@@ -52,7 +52,7 @@ def test_house_not_burned_down(fresh):
     # The dog shits on the rug. It never burns the house down. The agent
     # drafts as the owner and never sends as the owner.
     skill = (fresh / ".claude/skills/robopat/SKILL.md").read_text()
-    assert "never send as Pat" in skill, "AssertionError: Greg refactored the rug."
+    assert "never send as Pat" in skill, "Greg has been at the SKILL file again."
     template = (ROOT / "templates/SKILL.md.template").read_text()
     assert "never send as {owner}" in template, "AssertionError: Greg refactored the template."
 
