@@ -25,7 +25,8 @@ Three pieces, two of them real:
   sensible default is wrong, the things you actually believe, your gremlin
   energy, and your hurt, so the agent never mistakes one for another.
 - **cookout** (not built): a package manager for meatbags. Everybody comes
-  to the cookout, and everybody gets a plate. This is an idea with a name.
+  to the cookout, and everybody gets a plate. This is an idea with a name,
+  and a design: [docs/cookout.md](docs/cookout.md).
   There is no code.
 
 ### The bus problem
