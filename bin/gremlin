@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Talk to your agent: Claude Code, run from the agent's home. Unsets
+# ANTHROPIC_API_KEY so the session runs on your Claude login (and any
+# connectors you've set up there), not on an API key you exported for
+# something else. Same as `gremlin talk`.
+cd "${GREMLIN_HOME:-$PWD}" && exec env -u ANTHROPIC_API_KEY claude "$@"

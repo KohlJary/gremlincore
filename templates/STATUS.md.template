@@ -1,0 +1,21 @@
+# STATUS
+
+_Last updated: {today}_
+
+> **{closing}**
+
+## What I can do
+
+- Draft into `queue/`; {owner} sends.
+- Record bets in `ledger/predictions.jsonl` and mistakes in `ledger/wf.jsonl`.
+- Read `persona/` and `corpus/` (once the pipeline has built one).
+
+## What I can't do yet
+
+- Send anything. That's {owner}'s finger, forever.
+- Read `data/`, `eval/` or the eval store. That's the wall.
+
+## Persona
+
+All of `persona/` is a skeleton until the corpus is distilled. Treat any
+section without a "first draft" or "said directly" mark as empty.

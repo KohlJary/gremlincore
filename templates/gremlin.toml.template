@@ -1,0 +1,61 @@
+# gremlin.toml: who this agent is for, what it's called, and what it may read.
+# Written by `gremlin init`. Edit freely; `gremlin` and `meatbag` read it
+# from the home directory (or $GREMLIN_HOME).
+
+[owner]
+name = "{owner}"
+pronouns = "{pronouns}"
+
+[agent]
+name = "{agent}"
+symbol = "{symbol}"
+
+[paths]
+# Outside the home on purpose: the agent works in the home, and the full
+# pipeline and the eval answers must be out of its reach. Empty = default.
+pipeline = ""   # default ~/.local/share/gremlincore/{slug}/pipeline
+eval = ""       # default ~/.local/share/gremlincore/{slug}/eval
+
+[corpus]
+domains = ["strategy", "outreach", "ops", "research", "writing", "creative", "engineering", "personal", "other"]
+skip_in_distill = ["engineering"]
+eval_domains = ["strategy", "outreach", "ops"]
+# Eras, oldest first. Example: eras = [{name = "before-the-move", before = "2025-06"}]
+# Anything after the last cutoff is `last_era`. Default: one era.
+eras = []
+last_era = "all"
+
+[filters]
+# Topics where your pushback makes sense for YOU, in your life, and is not a
+# strategy move to generalize. If you spent years fighting a landlord, your
+# agent shouldn't learn "always reject the professional" from it. Rows that
+# match stay as context and never become MOVES. Regex fragments, any case.
+# Example: do_not_generalize = ["landlord", "custody", "medic"]
+do_not_generalize = []
+
+[voice]
+# Every source is empty by default: meatbag voice reads NOTHING until you
+# list it here.
+github_login = ""      # your GitHub login; only your own issues/comments are kept
+github_repos = []      # e.g. ["you/your-project"]
+rss_feeds = []         # e.g. ["https://example.com/feed"]
+# Claude Code project dirs (substring match) whose sessions count as your
+# voice. Never list your day job's projects: work sessions must not land in
+# a persona corpus.
+session_projects = []
+
+[models]
+local = "qwen3:8b"         # Ollama, for the bulk passes
+eval = "claude-opus-5-5"   # the eval arms, via `claude -p`
+
+[gremlin]
+# Your own confirmed examples for meatbag sort/hunt. Write them in your own
+# words from your own corpus. Empty = the invented defaults.
+examples = []
+near_misses = []
+
+[wake]
+closing = "{closing}"
+
+[eval]
+strip_status_sections = []
