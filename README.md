@@ -176,6 +176,8 @@ Personality loose, judgment stone-cold sober.
 
 Two open problems we've committed to solving: **keeping plates current**, and **a line between who you are and your employer's stuff that IT security can check for themselves**. What done looks like, and what's still unsolved: [docs/open-problems.md](docs/open-problems.md).
 
+Every architectural claim we make, and whether it's measured yet: [docs/claims.md](docs/claims.md) ("Loaded birds").
+
 Built, and tested against invented fixtures (`python -m pytest -q`):
 
 - the home, `gremlin init`, the config, the queue, both ledgers, lessons
