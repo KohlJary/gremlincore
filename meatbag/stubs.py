@@ -2,6 +2,7 @@
 exits non-zero, so a script that chains them stops instead of pretending.
 """
 import sys
+from meatbag import work_guard
 
 DISTILL = """meatbag distill: not built yet.
 
@@ -31,11 +32,13 @@ any run (format in docs/eval.md).
 """
 
 
+@work_guard
 def distill(argv=None):
     print(DISTILL, file=sys.stderr)
     return 3
 
 
+@work_guard
 def select_cases(argv=None):
     print(SELECT, file=sys.stderr)
     return 3

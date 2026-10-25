@@ -133,7 +133,9 @@ That weird project someone pasted in Slack? **meatbag** is the part that
 reads: chat exports, Claude Code sessions, repos. Point it at the work box
 and nothing yet separates *who you are* (the persona) from *what your
 employer owns* (their code, their docs, their commit history), and a
-persona is the thing you share. Run meatbag at home, on your own exports.
+persona is the thing you share. Run meatbag at home, on your own exports. A home made with
+`gremlin init --work` makes meatbag refuse outright, but that only covers
+the work box: your personal chats *about* work are still unfiltered.
 
 **gremlincore** (the runtime) is fine at work. It extracts nothing and
 phones nobody. The only thing that leaves the machine is `gremlin talk`,
@@ -203,9 +205,11 @@ Personality loose, judgment stone-cold sober.
 6. **Who you are is not what you work on.** The persona (who you are)
    travels with the plate. Context (an employer's repos, docs and commit
    history) is added on the machine it belongs to, and never flows back
-   into the plate. *Planned, not built:* `gremlin context add <repo>`,
-   kept outside `persona/`, excluded from export, with a test that a plate
-   built after adding context is byte-identical to one built before.
+   into the plate. `gremlin context add <repo>` keeps it as a list of
+   paths in `context/`, outside `persona/`, and `gremlin plate export`
+   doesn't read it: a test shows a plate exported after adding context is
+   byte-identical to one exported before. `gremlin init --work` makes a
+   work home, where meatbag won't run and nothing exports.
 
 ## Honest status
 
@@ -219,6 +223,10 @@ Built, and tested against invented fixtures (`python -m pytest -q`):
   from your red pen, the wake brief, the TUI;
 - normalize for Claude and ChatGPT exports (synthetic fixtures only);
 - the filters, the voice collector (reads nothing by default).
+- work homes (`gremlin init --work`), meatbag refusing to run in one,
+  `gremlin context`, `gremlin plate export` (an allowlist), and a test that
+  the runtime has no network imports. Status per claim:
+  [open problem 2](docs/open-problems.md).
 
 Built, not tested here: the eval-arm runner (it calls `claude -p`, so
 there's no offline test yet), and the local-model passes (`mine`, `sort`, `hunt`)

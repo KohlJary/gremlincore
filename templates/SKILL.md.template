@@ -107,3 +107,18 @@ corpus with the held-out conversations removed. `data/` and `eval/` are
 denied in this home's Claude settings, and so is the eval store outside
 it: a wall, not a sign. The eval is how {owner} finds out whether you're
 any good; reading it would make the answer meaningless.
+
+## Work context, and the other wall
+
+Who {owner} is (persona/) is not what {owner} works on. Work context is
+the repos and docs dirs registered with `gremlin context add`; the list
+lives in `context/contexts.json` in your home, and `gremlin context list`
+prints it. Those paths are where the context is. Read it there, when the
+work needs it.
+
+Context never goes into `persona/`, `STATUS.md` or `ideas.md`: not quoted,
+not summarized, not "just the names." Those are the files a plate is made
+of, and a plate is the thing {owner} might share. If something you learned
+at work looks like it belongs in the persona, it doesn't; tell {owner} and
+let them decide in their own words. If `gremlin wake` says WORK HOME,
+nothing in this home becomes a plate, and meatbag won't run here.

@@ -25,6 +25,7 @@ from . import paths
 from .filters import is_paste
 from .local_llm import chat_json
 from .sort_gremlin import GREMLIN_EXAMPLES, NEAR_MISSES
+from meatbag import work_guard
 
 
 def system(cfg=None):
@@ -48,6 +49,7 @@ def system(cfg=None):
     )
 
 
+@work_guard
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="meatbag hunt")
     ap.add_argument("--model")
