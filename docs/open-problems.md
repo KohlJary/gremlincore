@@ -97,4 +97,5 @@ on invented fixtures.
 ---
 
 *Both problems are tracked here until their done-lines pass. If you find a
-hole, open an issue. The template's called "I was Greg" for a reason.*
+hole, open an issue with the "Found a hole" template. You were the Greg
+your security team needed.*
