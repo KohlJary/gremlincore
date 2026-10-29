@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gremlincore"
-version = "0.0.1"
-description = "Your computer should have a little guy in it. Open-source, model-agnostic, agentic computing."
+version = "0.1.0"
+description = "Your computer should have a little guy in it. Open-source agentic computing that drafts and never sends."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Kohl Jary"}]

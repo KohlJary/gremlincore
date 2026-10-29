@@ -14,6 +14,7 @@ it would overwrite.
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -22,11 +23,18 @@ from .home import CONFIG_NAME, DEFAULTS, config, slug, today
 
 
 def templates_dir():
+    """A checkout's templates/, or where a package put them (the AUR package:
+    /usr/share/gremlincore/templates). GREMLINCORE_TEMPLATES overrides both."""
     here = Path(__file__).resolve().parent
-    for d in (here / "templates", here.parent / "templates"):
+    env = os.environ.get("GREMLINCORE_TEMPLATES")
+    cands = [Path(env)] if env else []
+    cands += [here / "templates", here.parent / "templates",
+              Path(sys.prefix) / "share/gremlincore/templates", Path("/usr/share/gremlincore/templates")]
+    for d in cands:
         if (d / "SKILL.md.template").exists():
             return d
-    raise SystemExit("gremlincore templates not found (install from a checkout: pip install -e .)")
+    raise SystemExit("gremlincore templates not found (install from a checkout: pip install -e ., "
+                     "or set GREMLINCORE_TEMPLATES)")
 
 
 def render(text, values):
