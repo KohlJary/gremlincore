@@ -229,7 +229,7 @@ def _personal_with_everything(tmp_path, monkeypatch):
 
 
 EXPECTED = {"STATUS.md", "plate.toml", "MANIFEST.sha256",
-            *(f"persona/{p.name}" for p in (ROOT / "templates/persona").glob("*.md"))}
+            *(f"persona/{p.name}" for p in (ROOT / "gremlincore/templates/persona").glob("*.md"))}
 
 
 def test_export_after_context_add_is_byte_identical(tmp_path, monkeypatch):

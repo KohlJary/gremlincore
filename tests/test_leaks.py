@@ -4,7 +4,9 @@ Greps every tracked-or-trackable file in the repo for names, handles and
 secrets that belong to somebody's private build. The patterns are built
 from pieces so this file doesn't match itself. The author's name is
 allowed in exactly three places: LICENSE, the README's credit lines, and
-pyproject's authors.
+pyproject's authors. The AUR PKGBUILD's Maintainer and url lines are the one
+exception to every pattern: the AUR requires a maintainer, and the author chose to
+publish the address (2026-10-23).
 """
 import re
 import subprocess
@@ -51,12 +53,17 @@ def allowed_author_lines(p):
     return set()
 
 
+PKGBUILD_PUBLIC = ("# Maintainer: ", "url=")
+
+
 def test_no_leaks():
     hits = []
     for p in files():
         text = p.read_text(errors="replace")
         allowed = allowed_author_lines(p)
         for i, line in enumerate(text.splitlines()):
+            if p.relative_to(ROOT).as_posix() == "pkg/aur/PKGBUILD" and line.startswith(PKGBUILD_PUBLIC):
+                continue
             for pat in FORBIDDEN:
                 if pat.search(line):
                     hits.append(f"{p.relative_to(ROOT)}:{i + 1}: {pat.pattern!r}")

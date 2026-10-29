@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
-WRITTEN = [p for d in ("docs", "templates") for p in (ROOT / d).rglob("*.md*")]
+WRITTEN = [p for d in ("docs", "templates") for p in (ROOT / ("gremlincore/templates" if d == "templates" else d)).rglob("*.md*")]
 WRITTEN += [ROOT / "README.md"]
 
 
@@ -53,7 +53,7 @@ def test_house_not_burned_down(fresh):
     # drafts as the owner and never sends as the owner.
     skill = (fresh / ".claude/skills/robopat/SKILL.md").read_text()
     assert "never send as Pat" in skill, "Greg has been at the SKILL file again."
-    template = (ROOT / "templates/SKILL.md.template").read_text()
+    template = (ROOT / "gremlincore/templates/SKILL.md.template").read_text()
     assert "never send as {owner}" in template, "AssertionError: Greg refactored the template."
 
 
@@ -110,6 +110,6 @@ def test_the_eval_has_a_wall_not_a_sign(fresh):
 def test_force_push_waits_for_you():
     # "He might suggest git push --force and then, crucially, wait for you to say yes."
     import json
-    s = json.loads((ROOT / "templates/.claude/settings.json").read_text())
+    s = json.loads((ROOT / "gremlincore/templates/.claude/settings.json").read_text())
     ask = s["permissions"].get("ask", [])
     assert any("--force" in r for r in ask) and any("-f" in r for r in ask)

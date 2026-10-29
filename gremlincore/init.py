@@ -23,8 +23,8 @@ from .home import CONFIG_NAME, DEFAULTS, config, slug, today
 
 
 def templates_dir():
-    """A checkout's templates/, or where a package put them (the AUR package:
-    /usr/share/gremlincore/templates). GREMLINCORE_TEMPLATES overrides both."""
+    """The package's own templates/ (in the wheel since 0.1.1), or an older
+    install's /usr/share/gremlincore/templates. GREMLINCORE_TEMPLATES overrides."""
     here = Path(__file__).resolve().parent
     env = os.environ.get("GREMLINCORE_TEMPLATES")
     cands = [Path(env)] if env else []
